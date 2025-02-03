@@ -1,0 +1,1 @@
+{"rustc":657458298742096754,"features":"","declared_features":"","target":0,"profile":0,"path":0,"deps":[[2868847804372141139,"build_script_build",false,16730687877229308220]],"local":[{"RerunIfChanged":{"output":"aarch64-apple-darwin/release-with-panic-unwind/build/serde-367e6b0c03a094a8/output","paths":["build.rs"]}}],"rustflags":[],"metadata":0,"config":0,"compile_kind":0}
