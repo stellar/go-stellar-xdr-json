@@ -1,1 +1,0 @@
-/Users/simonchow/go-stellar-xdr-json/target/x86_64-pc-windows-gnu/release-with-panic-unwind/libxdr2json.a: /Users/simonchow/go-stellar-xdr-json/lib/ffi/src/lib.rs /Users/simonchow/go-stellar-xdr-json/lib/xdr2json/src/lib.rs
