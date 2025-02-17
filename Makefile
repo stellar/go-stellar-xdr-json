@@ -2,15 +2,26 @@
 Cargo.lock: Cargo.toml
 	cargo update --workspace
 
+# Define targets and output directories
+TARGETS = \
+    x86_64-pc-windows-gnu \
+    x86_64-apple-darwin \
+    aarch64-apple-darwin \
+    x86_64-unknown-linux-gnu \
+    aarch64-unknown-linux-gnu
+
+LIBS_DIR = xdr2json/libs
+BUILD_DIR = target
+PROFILE = release-with-panic-unwind
+
+# Build all libraries
 build-libs: Cargo.lock
-	cd xdr2json && \
-	rustup target add x86_64-pc-windows-gnu && \
-	rustup target add x86_64-apple-darwin && \
-	rustup target add aarch64-apple-darwin && \
-	rustup target add x86_64-unknown-linux-gnu && \
-	rustup target add aarch64-unknown-linux-gnu && \
-	cargo build --target x86_64-pc-windows-gnu --profile release-with-panic-unwind && \
-	cargo build --target x86_64-apple-darwin --profile release-with-panic-unwind && \
-	cargo build --target aarch64-apple-darwin --profile release-with-panic-unwind && \
-	cargo build --target x86_64-unknown-linux-gnu --profile release-with-panic-unwind && \
-	cargo build --target aarch64-unknown-linux-gnu --profile release-with-panic-unwind
+	@for target in $(TARGETS); do \
+		rustup target add $$target; \
+		cargo build --target $$target --profile $(PROFILE); \
+		mkdir -p $(LIBS_DIR)/$$target; \
+		cp $(BUILD_DIR)/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
+	done
+
+dist-clean:
+	@rm -rf $(BUILD_DIR) $(LIBS_DIR)

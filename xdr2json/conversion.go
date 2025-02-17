@@ -6,21 +6,21 @@ package xdr2json
 // Note: no blank lines allowed.
 #include <stdlib.h>
 #include "../lib/xdr2json.h"
-#cgo windows,amd64 LDFLAGS: -L${SRCDIR}/../target/x86_64-pc-windows-gnu/release-with-panic-unwind/ -lxdr2json -lntdll -static -lws2_32 -lbcrypt -luserenv
-#cgo darwin,amd64  LDFLAGS: -L${SRCDIR}/../target/x86_64-apple-darwin/release-with-panic-unwind/ -lxdr2json -ldl -lm
-#cgo darwin,arm64  LDFLAGS: -L${SRCDIR}/../target/aarch64-apple-darwin/release-with-panic-unwind/ -lxdr2json -ldl -lm
-#cgo linux,amd64   LDFLAGS: -L${SRCDIR}/../target/x86_64-unknown-linux-gnu/release-with-panic-unwind/ -lxdr2json -ldl -lm
-#cgo linux,arm64   LDFLAGS: -L${SRCDIR}/../target/aarch64-unknown-linux-gnu/release-with-panic-unwind/ -lxdr2json -ldl -lm
+#cgo windows,amd64 LDFLAGS: -L${SRCDIR}/libs/x86_64-pc-windows-gnu -lxdr2json -lntdll -static -lws2_32 -lbcrypt -luserenv
+#cgo darwin,amd64  LDFLAGS: -L${SRCDIR}/libs/x86_64-apple-darwin -lxdr2json -ldl -lm
+#cgo darwin,arm64  LDFLAGS: -L${SRCDIR}/libs/aarch64-apple-darwin -lxdr2json -ldl -lm
+#cgo linux,amd64   LDFLAGS: -L${SRCDIR}/libs/x86_64-unknown-linux-gnu -lxdr2json -ldl -lm
+#cgo linux,arm64   LDFLAGS: -L${SRCDIR}/libs/aarch64-unknown-linux-gnu -lxdr2json -ldl -lm
+
 */
 import "C"
 
 import (
 	"encoding"
 	"encoding/json"
+	"github.com/pkg/errors"
 	"reflect"
 	"unsafe"
-
-	"github.com/pkg/errors"
 )
 
 // ConvertBytes takes an XDR object (`xdr`) and its serialized bytes (`field`)

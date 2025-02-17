@@ -1,47 +1,51 @@
 package xdr2json
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/stellar/go/keypair"
-	"github.com/stellar/go/xdr"
 )
 
+// We just need similarly named structs as are defined in the
+type Asset struct{}
+type SorobanTransactionData struct{}
+
 func TestConversion(t *testing.T) {
-	// Make a structure to encode
-	pubkey := keypair.MustRandom()
-	asset := xdr.MustNewCreditAsset("ABCD", pubkey.Address())
+	/* The base64-encoded string representing the asset
+	Created with:
+	$ stellar xdr encode --type Asset << -
+	{"credit_alphanum4":{"asset_code":"ABCD","issuer":"GBRXG22ZWIZ4JZ3QNPQGCWCS2I4DJ4UH35Y4FHE32YCPGTIIYO6GCL64"}}
+	-
+	*/
+	encodedAsset := "AAAAAUFCQ0QAAAAAY3NrWbIzxOdwa+BhWFLSODTyh99xwpyb1gTzTQjDvGE="
 
-	// Try the all-inclusive version
-	jsi, err := ConvertInterface(asset)
+	rawBytes, err := base64.StdEncoding.DecodeString(encodedAsset)
 	require.NoError(t, err)
 
-	// Try the byte-and-interface version
-	rawBytes, err := asset.MarshalBinary()
-	require.NoError(t, err)
-	jsb, err := ConvertBytes(xdr.Asset{}, rawBytes)
+	jsb, err := ConvertBytes(Asset{}, rawBytes)
 	require.NoError(t, err)
 
-	for _, rawJs := range []json.RawMessage{jsi, jsb} {
-		var dest map[string]interface{}
-		require.NoError(t, json.Unmarshal(rawJs, &dest))
+	var dest map[string]interface{}
+	require.NoError(t, json.Unmarshal(jsb, &dest))
 
-		require.Contains(t, dest, "credit_alphanum4")
-		require.Contains(t, dest["credit_alphanum4"], "asset_code")
-		require.Contains(t, dest["credit_alphanum4"], "issuer")
-		require.IsType(t, map[string]interface{}{}, dest["credit_alphanum4"])
-		if converted, ok := dest["credit_alphanum4"].(map[string]interface{}); assert.True(t, ok) {
-			require.Equal(t, pubkey.Address(), converted["issuer"])
-		}
+	// Ensure the asset has the correct fields
+	require.Contains(t, dest, "credit_alphanum4")
+	require.Contains(t, dest["credit_alphanum4"], "asset_code")
+	require.Contains(t, dest["credit_alphanum4"], "issuer")
+	require.IsType(t, map[string]interface{}{}, dest["credit_alphanum4"])
+
+	// Check the issuer address and asset code
+	if converted, ok := dest["credit_alphanum4"].(map[string]interface{}); assert.True(t, ok) {
+		require.Equal(t, "GBRXG22ZWIZ4JZ3QNPQGCWCS2I4DJ4UH35Y4FHE32YCPGTIIYO6GCL64", converted["issuer"])
+		require.Equal(t, "ABCD", converted["asset_code"])
 	}
 }
 
 func TestEmptyConversion(t *testing.T) {
-	js, err := ConvertBytes(xdr.SorobanTransactionData{}, []byte{})
+	js, err := ConvertBytes(SorobanTransactionData{}, []byte{})
 	require.NoError(t, err)
 	require.Equal(t, "", string(js))
 }
