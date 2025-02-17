@@ -11,6 +11,7 @@ TARGETS = \
     aarch64-unknown-linux-gnu
 
 LIBS_DIR = xdr2json/libs
+BUILD_DIR = target
 PROFILE = release-with-panic-unwind
 
 # Build all libraries
@@ -19,6 +20,8 @@ build-libs: Cargo.lock
 		rustup target add $$target; \
 		cargo build --target $$target --profile $(PROFILE); \
 		mkdir -p $(LIBS_DIR)/$$target; \
-		cp target/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
+		cp $(BUILD_DIR)/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
 	done
 
+dist-clean:
+	@rm -rf $(BUILD_DIR) $(LIBS_DIR)
