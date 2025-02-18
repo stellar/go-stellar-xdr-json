@@ -48,6 +48,12 @@ jobs:
     - run: git add -N . && git diff HEAD --exit-code
 
   build-and-test:
+    needs:
+    # Building the libs is not strictly required to do this next step, but given
+    # the next step runs costly CI, and the libs may not be confirmed to match
+    # the source until the prior step occurs, this step is set to depend on the
+    # first step and won't run until the libs are confirmed to build.
+    - build-libs
     strategy:
       matrix:
         rust: [msrv, latest]
