@@ -22,6 +22,7 @@ build-libs: Cargo.lock
 		mkdir -p $(LIBS_DIR)/$$target; \
 		cp $(BUILD_DIR)/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
 	done
+	shasum xdr2json/libs/**/*.a
 
 dist-clean:
 	@rm -rf $(BUILD_DIR) $(LIBS_DIR)
