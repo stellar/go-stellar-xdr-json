@@ -10,9 +10,7 @@ import (
 
 type Asset struct{}
 
-// A command-line tool to test that the xdr2json package compiles and runs on platforms:
-//
-//	go run github.com/stellar/go-stellar-xdr-json/xdr2json/tests/cmddecode AAAAAUFCQ0QAAAAAY3NrWbIzxOdwa+BhWFLSODTyh99xwpyb1gTzTQjDvGE=
+// A command-line tool to test that the xdr2json package compiles and runs on platforms.
 func main() {
 	xdrBase64 := "AAAAAUFCQ0QAAAAAY3NrWbIzxOdwa+BhWFLSODTyh99xwpyb1gTzTQjDvGE="
 	wantJson := `{"credit_alphanum4":{"asset_code":"ABCD","issuer":"GBRXG22ZWIZ4JZ3QNPQGCWCS2I4DJ4UH35Y4FHE32YCPGTIIYO6GCL64"}}`
