@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    # The stellar/rust-cache action is not used to ensure that the libs are
+    # reproducible with no cache.
     - run: rustup update
     - run: cargo version
     - run: make build-libs
@@ -52,7 +54,8 @@ jobs:
         path: xdr2json/libs
 
   record-attestation-of-libs:
-    #if: github.ref_name == 'main'
+    # if: github.event_name == 'push' && github.ref_name == 'main'
+    needs: [check-libs-reproducible]
     permissions:
       id-token: write
       attestations: write
@@ -61,18 +64,17 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: libs
-        path: xdr2json/libs
+        path: xdr2json/
     - uses: actions/attest-build-provenance@v1
       with:
         subject-path: xdr2json/libs/**/*.a
 
   build-and-test:
-    needs:
     # Building the libs is not strictly required to do this next step, but given
     # the next step runs costly CI, and the libs may not be confirmed to match
     # the source until the prior step occurs, this step is set to depend on the
     # first step and won't run until the libs are confirmed to build.
-    - check-libs-reproducible
+    needs: [check-libs-reproducible]
     strategy:
       matrix:
         rust: [msrv, latest]
