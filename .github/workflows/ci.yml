@@ -64,7 +64,7 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: libs
-        path: xdr2json/
+        path: xdr2json/libs
     - uses: actions/attest-build-provenance@v1
       with:
         subject-path: xdr2json/libs/**/*.a
