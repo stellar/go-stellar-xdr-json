@@ -23,5 +23,8 @@ build-libs: Cargo.lock
 		cp $(BUILD_DIR)/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
 	done
 
+generate-types:
+	cargo run --bin generate-types | gofmt > xdr2json/types.go
+
 dist-clean:
 	@rm -rf $(BUILD_DIR) $(LIBS_DIR)

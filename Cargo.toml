@@ -2,7 +2,8 @@
 resolver = "2"
 members = [
     "lib/ffi",
-    "lib/xdr2json"
+    "lib/xdr2json",
+    "scripts/generate-types"
 ]
 
 [workspace.package]
