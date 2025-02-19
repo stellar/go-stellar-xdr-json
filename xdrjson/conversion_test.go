@@ -1,4 +1,4 @@
-package xdr2json
+package xdrjson
 
 import (
 	"encoding/base64"
@@ -10,8 +10,10 @@ import (
 )
 
 // We just need similarly named structs as are defined in the
-type Asset struct{}
-type SorobanTransactionData struct{}
+type (
+	Asset                  struct{}
+	SorobanTransactionData struct{}
+)
 
 func TestConversion(t *testing.T) {
 	/* The base64-encoded string representing the asset

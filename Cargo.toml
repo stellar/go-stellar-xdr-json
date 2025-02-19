@@ -2,7 +2,7 @@
 resolver = "2"
 members = [
     "lib/ffi",
-    "lib/xdr2json"
+    "lib/xdrjson"
 ]
 
 [workspace.package]
