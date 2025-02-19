@@ -52,7 +52,7 @@ jobs:
         path: xdr2json/libs
 
   record-attestation-of-libs:
-    if: github.ref_name == 'main'
+    #if: github.ref_name == 'main'
     permissions:
       id-token: write
       attestations: write
