@@ -54,7 +54,7 @@ jobs:
         path: xdr2json/libs
 
   record-attestation-of-libs:
-    # if: github.event_name == 'push' && github.ref_name == 'main'
+    if: github.event_name == 'push' && github.ref_name == 'main'
     needs: [check-libs-reproducible]
     permissions:
       id-token: write
