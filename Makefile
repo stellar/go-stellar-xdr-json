@@ -17,6 +17,7 @@ PROFILE = release-with-panic-unwind
 # Build all libraries
 build-libs: Cargo.lock
 	docker run --rm -v $$PWD:/wd -w /wd --platform=linux/amd64 rust:1.84.1-bullseye /bin/bash -c '\
+		rustc -vV > $(LIBS_DIR)/rust-version; \
 		for target in $(TARGETS); do \
 			cargo build --profile $(PROFILE) --target $$target; \
 			mkdir -p $(LIBS_DIR)/$$target; \
