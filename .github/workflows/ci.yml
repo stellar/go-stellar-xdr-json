@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_protected == 'true' && github.sha || github.ref }}-{{ github.event_name }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  complete:
+    if: always()
+    needs: [check-fmt-rust, check-fmt-go, check-libs-reproducible, build-and-test]
+    runs-on: ubuntu-latest
+    steps:
+    - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+      run: exit 1
+
+  check-fmt-rust:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: rustup update
+    - run: cargo fmt --all --check
+
+  check-fmt-go:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: go fmt ./...
+    - run: git add -N . && git diff HEAD --exit-code
+
+  check-libs-reproducible:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    # The stellar/rust-cache action is not used to ensure that the libs are
+    # reproducible with no cache.
+    - run: rustup update
+    - run: cargo version
+    - run: make build-libs
+    - run: git add -N . && git diff HEAD --exit-code
+    - uses: actions/upload-artifact@v4
+      with:
+        name: libs
+        path: xdrjson/libs
+
+  record-attestation-of-libs:
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    needs: [check-libs-reproducible]
+    permissions:
+      id-token: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: libs
+        path: xdrjson/libs
+    - uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: xdrjson/libs/**/*.a
+
+  build-and-test:
+    # Building the libs is not strictly required to do this next step, but given
+    # the next step runs costly CI, and the libs may not be confirmed to match
+    # the source until the prior step occurs, this step is set to depend on the
+    # first step and won't run until the libs are confirmed to build.
+    needs: [check-libs-reproducible]
+    strategy:
+      matrix:
+        go: [stable, oldstable]
+        sys:
+        - os: ubuntu-latest    # amd64
+        - os: ubuntu-22.04-arm # arm64
+        - os: macos-latest     # arm64
+        - os: macos-13         # amd64
+        - os: windows-latest   # amd64
+    runs-on: ${{ matrix.sys.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go }}
+    - run: go version
+    - run: go vet ./...
+    - run: go build ./...
+    - run: go test -v ./...
