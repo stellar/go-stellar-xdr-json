@@ -22,4 +22,4 @@ go test ./...
 
 **TODO:**
 
-* [Automate building/updates for xdr2json](https://github.com/stellar/stellar-rpc/issues/350)
+* [Automate building/updates for xdrjson](https://github.com/stellar/stellar-rpc/issues/350)

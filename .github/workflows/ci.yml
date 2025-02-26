@@ -51,7 +51,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: libs
-        path: xdr2json/libs
+        path: xdrjson/libs
 
   record-attestation-of-libs:
     if: github.event_name == 'push' && github.ref_name == 'main'
@@ -64,10 +64,10 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: libs
-        path: xdr2json/libs
+        path: xdrjson/libs
     - uses: actions/attest-build-provenance@v1
       with:
-        subject-path: xdr2json/libs/**/*.a
+        subject-path: xdrjson/libs/**/*.a
 
   build-and-test:
     # Building the libs is not strictly required to do this next step, but given

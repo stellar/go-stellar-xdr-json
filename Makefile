@@ -10,7 +10,7 @@ TARGETS = \
     x86_64-unknown-linux-gnu \
     aarch64-unknown-linux-gnu
 
-LIBS_DIR = xdr2json/libs
+LIBS_DIR = xdrjson/libs
 BUILD_DIR = target
 PROFILE = release-with-panic-unwind
 
