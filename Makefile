@@ -26,5 +26,8 @@ build-libs: Cargo.lock
 		shasum -a 256 $(LIBS_DIR)/**/*.a; \
 		'
 
+generate-types:
+	cargo run --bin generate-types | gofmt > xdrjson/types.go
+
 dist-clean:
 	@rm -rf $(BUILD_DIR) $(LIBS_DIR)

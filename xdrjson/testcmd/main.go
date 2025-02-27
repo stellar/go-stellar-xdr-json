@@ -24,7 +24,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	json, err := xdrjson.ConvertBytes(Asset{}, rawBytes)
+	json, err := xdrjson.Decode(xdrjson.Asset, rawBytes)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: converting binary to json: %v\n", err)
 		os.Exit(1)
