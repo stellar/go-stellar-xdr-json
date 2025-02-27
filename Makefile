@@ -27,7 +27,7 @@ build-libs: Cargo.lock
 		'
 
 generate-types:
-	cargo run --bin generate-types | gofmt > xdr2json/types.go
+	cargo run --bin generate-types | gofmt > xdrjson/types.go
 
 dist-clean:
 	@rm -rf $(BUILD_DIR) $(LIBS_DIR)
