@@ -24,6 +24,14 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Decode takes an XDR base64 encoded value, and decodes it as the XdrType,
+// returning it's XDR-JSON representation as JSON.
+//
+// Returns the JSON message if decoding successful, otherwise an error.
+func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
+	return convertAnyBytes(string(xdrTypeName), field)
+}
+
 // ConvertBytes takes an XDR object (`xdr`) and its serialized bytes (`field`)
 // and returns the raw JSON-formatted serialization of that object.
 // It can be unmarshalled to a proper JSON structure, but the raw bytes are
@@ -61,14 +69,6 @@ func ConvertInterface(xdr encoding.BinaryMarshaler) (json.RawMessage, error) {
 	}
 
 	return convertAnyBytes(xdrTypeName, data)
-}
-
-// Decode takes an XDR base64 encoded value, and decodes it as the XdrType,
-// returning it's XDR-JSON representation as JSON.
-//
-// Returns the JSON message if decoding successful, otherwise an error.
-func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
-	return convertAnyBytes(string(xdrTypeName), field)
 }
 
 func convertAnyBytes(xdrTypeName string, field []byte) (json.RawMessage, error) {
