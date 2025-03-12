@@ -45,10 +45,9 @@ func TestDecode_empty(t *testing.T) {
 	require.Error(t, err)
 }
 
-// We just need similarly named structs as are defined in the
-
 func TestConvertBytes_success(t *testing.T) {
 	type Asset struct{}
+
 	/* The base64-encoded string representing the asset
 	Created with:
 	$ stellar xdr encode --type Asset << -
@@ -81,6 +80,7 @@ func TestConvertBytes_success(t *testing.T) {
 
 func TestConvertBytes_empty(t *testing.T) {
 	type SorobanTransactionData struct{}
+
 	js, err := ConvertBytes(SorobanTransactionData{}, []byte{})
 	require.NoError(t, err)
 	require.Equal(t, "", string(js))
