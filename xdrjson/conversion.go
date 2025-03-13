@@ -24,12 +24,31 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Decode takes an XDR value, and decodes it as the XdrType, returning it's
-// XDR-JSON representation as JSON.
+// Decode takes XDR binary, decodes it as the XdrType, returning XDR-JSON.
 //
 // Returns the JSON message if decoding successful, otherwise an error.
 func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
 	return convertAnyBytes(string(xdrTypeName), field)
+}
+
+type XdrJsonType interface {
+	encoding.BinaryMarshaler
+	XdrJsonTypeName() string
+}
+
+// DecodeInterface takes a value that serializes via a BinaryMarshaler
+// implementation to XDR binary, decodes the XDR binary and returns XDR-JSON.
+//
+// The XdrType that the XDR binary is decoded as is the XDR type name as
+// returned by the values XdrJsonTypeName.
+func DecodeInterface(xdr XdrJsonType) (json.RawMessage, error) {
+	xdrTypeName := xdr.XdrJsonTypeName()
+	data, err := xdr.MarshalBinary()
+	if err != nil {
+		return []byte(""), errors.Wrapf(err, "failed to serialize XDR type '%s'", xdrTypeName)
+	}
+
+	return convertAnyBytes(xdrTypeName, data)
 }
 
 // ConvertBytes takes an XDR object (`xdr`) and its serialized bytes (`field`)
@@ -60,7 +79,7 @@ func ConvertBytes(xdr interface{}, field []byte) (json.RawMessage, error) {
 // Unlike `ConvertBytes`, the value here needs to be valid and
 // serializable.
 //
-// Deprecated: Use `Decode` instead.
+// Deprecated: Use `DecodeInterface` instead.
 func ConvertInterface(xdr encoding.BinaryMarshaler) (json.RawMessage, error) {
 	xdrTypeName := reflect.TypeOf(xdr).Name()
 	data, err := xdr.MarshalBinary()
