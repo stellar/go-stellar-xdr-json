@@ -16,8 +16,8 @@ package xdrjson
 import "C"
 
 import (
-	"encoding"
 	"encoding/json"
+	"unsafe"
 
 	"github.com/pkg/errors"
 )
@@ -32,7 +32,7 @@ func Decode(xdrTypeName XdrType, xdrBinary []byte) (json.RawMessage, error) {
 	// scope just added to show matching alloc/frees
 	{
 		goRawXdr := CXDR(xdrBinary)
-		b := C.CString(xdrTypeName)
+		b := C.CString(string(xdrTypeName))
 
 		result := C.xdr_to_json(b, goRawXdr)
 		C.free(unsafe.Pointer(b))
