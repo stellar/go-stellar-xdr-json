@@ -22,7 +22,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Decode takes XDR binary, decodes it as the XdrType, returning XDR-JSON.
+// Decode XDR binary into JSON
+//
+// Takes in XDR binary, decodes it as the XdrType, returning XDR-JSON.
 //
 // If the XDR binary passed in is zero length, decoding will error.
 //
