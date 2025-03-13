@@ -26,6 +26,8 @@ import (
 
 // Decode takes XDR binary, decodes it as the XdrType, returning XDR-JSON.
 //
+// If the XDR binary passed in is zero length, decoding will error.
+//
 // Returns the JSON message if decoding successful, otherwise an error.
 func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
 	return convertAnyBytes(string(xdrTypeName), field)
