@@ -1,3 +1,9 @@
+build:
+	go build ./...
+
+test:
+	go test ./...
+
 # update the Cargo.lock every time the Cargo.toml changes.
 Cargo.lock: Cargo.toml
 	cargo update --workspace
@@ -19,12 +25,15 @@ build-libs: Cargo.lock
 	docker run --rm -v $$PWD:/wd -w /wd --platform=linux/amd64 rust:1.84.1-bullseye /bin/bash -c '\
 		rustc -vV > $(LIBS_DIR)/rust-version; \
 		for target in $(TARGETS); do \
-			cargo build --profile $(PROFILE) --target $$target; \
+			cargo build --profile $(PROFILE) --target $$target --package xdrjson; \
 			mkdir -p $(LIBS_DIR)/$$target; \
 			cp $(BUILD_DIR)/$$target/$(PROFILE)/*.a $(LIBS_DIR)/$$target/; \
 		done; \
 		shasum -a 256 $(LIBS_DIR)/**/*.a; \
 		'
+
+generate-types:
+	cargo run --bin generate-types | gofmt > xdrjson/types.go
 
 dist-clean:
 	@rm -rf $(BUILD_DIR) $(LIBS_DIR)

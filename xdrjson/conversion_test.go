@@ -9,13 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// We just need similarly named structs as are defined in the
-type (
-	Asset                  struct{}
-	SorobanTransactionData struct{}
-)
-
-func TestConversion(t *testing.T) {
+func TestDecode(t *testing.T) {
 	/* The base64-encoded string representing the asset
 	Created with:
 	$ stellar xdr encode --type Asset << -
@@ -27,7 +21,7 @@ func TestConversion(t *testing.T) {
 	rawBytes, err := base64.StdEncoding.DecodeString(encodedAsset)
 	require.NoError(t, err)
 
-	jsb, err := ConvertBytes(Asset{}, rawBytes)
+	jsb, err := Decode(Asset, rawBytes)
 	require.NoError(t, err)
 
 	var dest map[string]interface{}
@@ -46,8 +40,7 @@ func TestConversion(t *testing.T) {
 	}
 }
 
-func TestEmptyConversion(t *testing.T) {
-	js, err := ConvertBytes(SorobanTransactionData{}, []byte{})
-	require.NoError(t, err)
-	require.Equal(t, "", string(js))
+func TestDecode_empty(t *testing.T) {
+	_, err := Decode(SorobanTransactionData, []byte{})
+	require.Error(t, err)
 }
