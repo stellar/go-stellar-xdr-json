@@ -31,17 +31,15 @@ func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
 	return convertAnyBytes(string(xdrTypeName), field)
 }
 
-type XdrJsonType interface {
-	encoding.BinaryMarshaler
-	XdrJsonTypeName() string
-}
-
 // DecodeInterface takes a value that serializes via a BinaryMarshaler
 // implementation to XDR binary, decodes the XDR binary and returns XDR-JSON.
 //
 // The XdrType that the XDR binary is decoded as is the XDR type name as
-// returned by the values XdrJsonTypeName.
-func DecodeInterface(xdr XdrJsonType) (json.RawMessage, error) {
+// returned by the value's XdrJsonTypeName function.
+func DecodeInterface(xdr interface {
+	encoding.BinaryMarshaler
+	XdrJsonTypeName() string
+}) (json.RawMessage, error) {
 	xdrTypeName := xdr.XdrJsonTypeName()
 	data, err := xdr.MarshalBinary()
 	if err != nil {
