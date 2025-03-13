@@ -24,8 +24,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Decode takes an XDR base64 encoded value, and decodes it as the XdrType,
-// returning it's XDR-JSON representation as JSON.
+// Decode takes an XDR value, and decodes it as the XdrType, returning it's
+// XDR-JSON representation as JSON.
 //
 // Returns the JSON message if decoding successful, otherwise an error.
 func Decode(xdrTypeName XdrType, field []byte) (json.RawMessage, error) {
