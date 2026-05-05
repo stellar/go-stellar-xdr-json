@@ -212,7 +212,7 @@ checksum = "ca81e6b4777c89fd810c25a4be2b1bd93ea034fbe58e6a75216a34c6b82c539b"
 
 [[package]]
 name = "ffi"
-version = "23.0.0"
+version = "26.0.0"
 dependencies = [
  "libc",
 ]
@@ -586,9 +586,9 @@ dependencies = [
 
 [[package]]
 name = "stellar-xdr"
-version = "23.0.0"
+version = "26.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89d2848e1694b0c8db81fd812bfab5ea71ee28073e09ccc45620ef3cf7a75a9b"
+checksum = "fea3195594b044ea3a5b05906f81d945480825f00db4e3ae7d77526bf546ff3a"
 dependencies = [
  "cfg_eval",
  "crate-git-revision",
@@ -802,7 +802,7 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "xdrjson"
-version = "23.0.0"
+version = "26.0.0"
 dependencies = [
  "anyhow",
  "base64",
