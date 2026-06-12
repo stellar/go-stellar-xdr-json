@@ -1,7 +1,7 @@
-rustc 1.95.0 (59807616e 2026-04-14)
+rustc 1.96.0 (ac68faa20 2026-05-25)
 binary: rustc
-commit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860
-commit-date: 2026-04-14
+commit-hash: ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96
+commit-date: 2026-05-25
 host: x86_64-unknown-linux-gnu
-release: 1.95.0
+release: 1.96.0
 LLVM version: 22.1.2
