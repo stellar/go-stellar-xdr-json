@@ -1,3 +1,5 @@
+//go:build cgo && ((windows && amd64) || (darwin && amd64) || (darwin && arm64) || (linux && amd64) || (linux && arm64))
+
 //nolint:lll
 package xdrjson
 
