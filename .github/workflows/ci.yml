@@ -43,9 +43,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     # The stellar/rust-cache action is not used to ensure that the libs are
-    # reproducible with no cache.
-    - run: rustup update
-    - run: cargo version
+    # reproducible with no cache. The build runs entirely inside the
+    # digest-pinned image in `make build-libs`, so the runner's host toolchain
+    # does not affect the produced libs.
     - run: make build-libs
     - run: git add -N . && git diff HEAD --exit-code
     - uses: actions/upload-artifact@v4
@@ -82,7 +82,7 @@ jobs:
         - os: ubuntu-latest    # amd64
         - os: ubuntu-22.04-arm # arm64
         - os: macos-latest     # arm64
-        - os: macos-13         # amd64
+        - os: macos-15-intel   # amd64
         - os: windows-latest   # amd64
     runs-on: ${{ matrix.sys.os }}
     steps:
