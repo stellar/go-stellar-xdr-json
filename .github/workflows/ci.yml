@@ -82,7 +82,7 @@ jobs:
         - os: ubuntu-latest    # amd64
         - os: ubuntu-22.04-arm # arm64
         - os: macos-latest     # arm64
-        - os: macos-13         # amd64
+        - os: macos-15-intel   # amd64
         - os: windows-latest   # amd64
     runs-on: ${{ matrix.sys.os }}
     steps:
