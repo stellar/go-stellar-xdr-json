@@ -1,4 +1,4 @@
-use stellar_xdr::curr::TypeVariant;
+use stellar_xdr::TypeVariant;
 
 /// Generates a Go file that contains the types for the XDR-JSON schema as
 /// constants.

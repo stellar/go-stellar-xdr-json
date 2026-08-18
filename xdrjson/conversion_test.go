@@ -44,3 +44,21 @@ func TestDecode_empty(t *testing.T) {
 	_, err := Decode(SorobanTransactionData, []byte{})
 	require.Error(t, err)
 }
+
+func TestDecode_executableTag(t *testing.T) {
+	/* The base64-encoded string representing the Protocol 28 SCVal
+	Created with:
+	$ stellar xdr encode --type ScVal << -
+	{"executable_tag":"tag"}
+	-
+	*/
+	encodedScVal := "AAAAFgAAAAN0YWcA"
+
+	rawBytes, err := base64.StdEncoding.DecodeString(encodedScVal)
+	require.NoError(t, err)
+
+	jsb, err := Decode(ScVal, rawBytes)
+	require.NoError(t, err)
+
+	require.JSONEq(t, `{"executable_tag":"tag"}`, string(jsb))
+}
