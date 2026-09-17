@@ -1,0 +1,11 @@
+{
+  "workspace": ".",
+  "go_sast_enabled": true,
+  "rust_sast_enabled": true,
+  "sast_ignore_overrides": "go-error-not-checked:xdrjson/conversion.go,go-error-not-checked:xdrjson/testcmd/main.go,go-hardcoded-credentials:xdrjson/types.go,rust-memory-safety:lib/xdrjson/src/lib.rs,rust-panic-in-production:lib/ffi/src/lib.rs,rust-panic-in-production:lib/xdrjson/src/lib.rs,rust-unsafe-usage:lib/ffi/src/lib.rs,rust-unsafe-usage:lib/xdrjson/src/lib.rs",
+  "secret_scanning_enabled": true,
+  "console_tabular_enabled": true,
+  "socket_tier_1_enabled": false,
+  "trivy_vuln_enabled": false,
+  "trufflehog_exclude_dir": "vendor,target,.git"
+}
